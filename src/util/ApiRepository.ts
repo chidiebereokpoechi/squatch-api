@@ -4,21 +4,15 @@ import { DeepPartial, Repository } from 'typeorm'
 import { Base } from '../database/entities/base.entity'
 
 export class ApiRepository<T extends Base> extends Repository<T> {
-  public async build(model: DeepPartial<T>, uniqueFields?: (keyof T)[]): Promise<T> {
-    if (uniqueFields) {
-      await new Promise((resolve, reject) => {
-        uniqueFields.forEach(async field => {
-          if (await this.findOne({ [field]: model[field] })) {
-            return reject(
-              new UnprocessableEntityException(
-                `${this.metadata.name} with ${field} [${model[field]}] already exists`
-              )
-            )
-          }
-        })
-
-        resolve()
-      })
+  public async build(model: DeepPartial<T>, uniqueFields: (keyof T)[] = []): Promise<T> {
+    for (const field of uniqueFields) {
+      if (await this.findOne({ [field]: model[field] })) {
+        return Promise.reject(
+          new UnprocessableEntityException(
+            `${this.metadata.name} with ${field} [${model[field]}] already exists`
+          )
+        )
+      }
     }
 
     return this.save(model)

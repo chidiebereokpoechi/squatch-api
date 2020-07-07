@@ -18,6 +18,14 @@ export class ApiService<
     return this.repository.retrieve(id, select, relations)
   }
 
+  public retrieveBy(
+    subset: DeepPartial<T>,
+    select?: (keyof T)[],
+    relations?: (keyof T)[]
+  ): Promise<T> {
+    return this.repository.retrieveBy(subset, select, relations)
+  }
+
   public create(model: CreateModel, ...args: any[]): Promise<T> {
     return this.repository.save(model)
   }

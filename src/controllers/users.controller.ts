@@ -23,9 +23,9 @@ export class UsersController extends ApiController<User> {
     return this.service.getFollowing(id)
   }
 
-  @Get(':id')
-  public retrieve(@Param('id') id: number) {
-    return this.service.retrieve(id)
+  @Get(':username')
+  public retrieve(@Param('username') username: string) {
+    return this.service.retrieveBy({ username })
   }
 
   @Public()

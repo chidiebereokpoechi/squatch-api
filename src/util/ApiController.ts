@@ -11,7 +11,7 @@ export class ApiController<T extends Base> {
   }
 
   @Get(':id')
-  public retrieve(@Param('id') id: number): Promise<T> {
+  public retrieve(@Param('id') id: number | any): Promise<T> {
     return this.service.retrieve(id)
   }
 }

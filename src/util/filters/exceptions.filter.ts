@@ -28,7 +28,7 @@ export class ExceptionsFilter implements ExceptionFilter {
         ok: false,
         path: request.url,
         status: exception.status,
-        message: 'Authenticated user does not exist',
+        message: 'Authenticated user does not exist and has been de-authenticated. Resend request.',
       })
     }
 

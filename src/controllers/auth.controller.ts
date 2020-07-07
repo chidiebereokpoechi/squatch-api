@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
-import { ApiAcceptedResponse, ApiTags } from '@nestjs/swagger'
+import { Controller, Delete, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
 import { User } from '../database/entities'
-import { Login } from '../model'
 import { AuthService } from '../services'
 import { LocalAuthGuard, LoginGuard } from '../util/auth'
 import { AuthUser, Public } from '../util/decorators'
@@ -15,9 +14,9 @@ export class AuthController {
 
   @Public()
   @UseGuards(LoginGuard)
-  @ApiAcceptedResponse()
+  @UseGuards(LocalAuthGuard)
   @Post()
-  public async login(@Body() login: Login, @AuthUser() user: User) {
+  public async login(@AuthUser() user: User) {
     return user
   }
 

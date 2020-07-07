@@ -31,13 +31,13 @@ export class PrintsController extends ApiController<Print> {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post(':id/like')
+  @Post(':id/likes')
   public like(@Param('id') id: number, @AuthUser() user: User): Promise<Print> {
     return this.service.like(id, user)
   }
 
   @UseGuards(LocalAuthGuard)
-  @Delete(':id/like')
+  @Delete(':id/likes')
   public unlike(@Param('id') id: number, @AuthUser() user: User): Promise<Print> {
     return this.service.unlike(id, user)
   }

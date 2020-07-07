@@ -33,5 +33,7 @@ export class AuthService {
     request.session?.destroy(() => {
       request.logOut()
     })
+
+    request.logOut()
   }
 }
