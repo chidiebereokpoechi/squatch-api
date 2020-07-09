@@ -13,6 +13,16 @@ export class UsersController extends ApiController<User> {
   @Inject(UsersService)
   protected readonly service!: UsersService
 
+  @Get('exists/email/:email')
+  public checkEmail(@Param('email') email: string) {
+    return this.service.checkBy('login:email', email)
+  }
+
+  @Get('exists/username/:username')
+  public checkUsername(@Param('username') username: string) {
+    return this.service.checkBy(':username', username)
+  }
+
   @Get(':id/followers')
   public getFollowers(@Param('id') id: number) {
     return this.service.getFollowers(id)

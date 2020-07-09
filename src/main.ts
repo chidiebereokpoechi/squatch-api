@@ -6,6 +6,7 @@ import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import config from 'config'
 import connectRedis from 'connect-redis'
+import cors from 'cors'
 import session from 'express-session'
 import passport from 'passport'
 import redis from 'redis'
@@ -35,6 +36,14 @@ async function bootstrap() {
 
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use(
+    cors({
+      allowedHeaders: ['Content-Type'],
+      methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+      origin: /./,
+      credentials: true,
+    })
+  )
 
   const options = new DocumentBuilder()
     .setTitle('Squatch')

@@ -46,6 +46,17 @@ export class ApiRepository<T extends Base> extends Repository<T> {
   }
 
   public async retrieve(id: number, select?: (keyof T)[], relations?: (keyof T)[]): Promise<T> {
-    return await this.retrieveBy({ id } as any, select, relations)
+    return this.retrieveBy({ id } as any, select, relations)
+  }
+
+  public async checkBy(path: string, value: string, relation?: string) {
+    const entityName = this.metadata.name.toLowerCase()
+    const query = this.createQueryBuilder(entityName)
+
+    if (relation) {
+      query.innerJoinAndSelect(`${entityName}.${relation}`, relation)
+    }
+
+    return query.where(`${path} = :value`, { path, value }).getOne()
   }
 }

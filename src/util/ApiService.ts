@@ -29,4 +29,10 @@ export class ApiService<
   public create(model: CreateModel, ...args: any[]): Promise<T> {
     return this.repository.save(model)
   }
+
+  public async checkBy(path: string, value: string): Promise<boolean> {
+    const [relation] = path.split(':') as [string | undefined, string]
+    const response = await this.repository.checkBy(path.replace(':', '.'), value, relation)
+    return !!response
+  }
 }
