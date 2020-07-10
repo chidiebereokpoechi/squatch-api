@@ -8,8 +8,8 @@ import { Following } from '../database/entities/following.entity'
 import { LoginsRepository } from '../database/repositories'
 import { UsersRepository } from '../database/repositories/users.repository'
 import { CreateUser } from '../model/users'
-import { ApiRepository } from '../util/ApiRepository'
-import { ApiService } from '../util/ApiService'
+import { ApiRepository } from '../util/api-repository'
+import { ApiService } from '../util/api-service'
 
 @Injectable()
 export class UsersService extends ApiService<User, CreateUser> {
@@ -36,17 +36,18 @@ export class UsersService extends ApiService<User, CreateUser> {
       .andWhere('followings.followerId = :followerId', { followerId })
   }
 
-  public async getFollowersOrFollowing(id: number, page?: number, isFollowing?: boolean) {
+  public async getFollowersOrFollowing(id: number, page = 1, isFollowing = false) {
     const field = (following?: boolean) => (following ? 'following' : 'follower')
-    const skip = page ? (page > 1 ? page - 1 : 0) : 0
+    const take = config.get<number>('pagination.results')
+    const skip = (page - 1) * take
 
     return await getRepository(Following)
       .createQueryBuilder('followings')
       .where(`followings.${field(!isFollowing)}Id = ${id}`)
       .leftJoinAndSelect(`followings.${field(isFollowing)}`, 'user')
       .select(['user.id as id', 'user.username as username', 'user.name as name'])
+      .take(take)
       .skip(skip)
-      .take(config.get<number>('pagination.results'))
       .getRawMany()
   }
 
@@ -65,21 +66,21 @@ export class UsersService extends ApiService<User, CreateUser> {
       throw new UnprocessableEntityException('Already following that user')
     }
 
-    return this.repository.manager.transaction(async () => {
-      await this.repository.query(
+    return this.repository.manager.transaction(async manager => {
+      await manager.query(
         ` INSERT INTO followings (followerId, followingId)
           VALUES (${follower.id}, ${followingId})
         `
       )
 
-      await this.repository.query(
+      await manager.query(
         ` UPDATE users
           SET followingCount = followingCount + 1
           WHERE id = ${follower.id}
         `
       )
 
-      await this.repository.query(
+      await manager.query(
         ` UPDATE users
           SET followersCount = followersCount + 1
           WHERE id = ${followingId}

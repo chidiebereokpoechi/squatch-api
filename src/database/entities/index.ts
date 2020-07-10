@@ -1,3 +1,5 @@
+export * from './following.entity'
 export * from './login.entity'
+export * from './print-liking.entity'
 export * from './print.entity'
 export * from './user.entity'

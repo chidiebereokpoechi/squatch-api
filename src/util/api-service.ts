@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DeepPartial } from 'typeorm'
 import { Base } from '../database/entities/base.entity'
-import { ApiRepository } from './ApiRepository'
+import { ApiRepository } from './api-repository'
 
 export class ApiService<
   T extends Base,

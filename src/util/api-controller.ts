@@ -1,6 +1,6 @@
 import { Get, Param } from '@nestjs/common'
 import { Base } from '../database/entities/base.entity'
-import { ApiService } from './ApiService'
+import { ApiService } from './api-service'
 
 export class ApiController<T extends Base> {
   protected readonly service!: ApiService<T>

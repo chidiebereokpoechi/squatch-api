@@ -30,7 +30,7 @@ async function bootstrap() {
       secret: config.get<string>('app.secret'),
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false, httpOnly: false, maxAge: 7 * 24 * 60 * 60 * 1000 },
+      cookie: { secure: 'auto', httpOnly: false, maxAge: 7 * 24 * 60 * 60 * 1000 },
     })
   )
 

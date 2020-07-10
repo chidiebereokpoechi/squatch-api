@@ -4,7 +4,7 @@ import { Request } from 'express'
 import { omit } from 'lodash'
 import { Login, User } from '../database/entities'
 import { LoginsRepository, UsersRepository } from '../database/repositories'
-import { ApiRepository } from '../util/ApiRepository'
+import { ApiRepository } from '../util/api-repository'
 
 @Injectable()
 export class AuthService {

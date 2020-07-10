@@ -1,6 +1,6 @@
-import { find, matches, remove } from 'lodash'
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { Base } from './base.entity'
+import { PrintLiking } from './print-liking.entity'
 import { User } from './user.entity'
 
 @Entity('prints')
@@ -15,28 +15,12 @@ export class Print extends Base {
   @JoinColumn()
   public creator!: User
 
-  @ManyToMany(
-    () => User,
-    user => user.liked,
-    { cascade: ['remove'] }
+  @OneToMany(
+    () => PrintLiking,
+    printLiking => printLiking.print
   )
-  @JoinTable({ name: 'print-likers' })
-  public likers!: User[]
+  public likings!: PrintLiking[]
 
-  public userIsLiker(user: User): User | undefined {
-    return find(this.likers, { id: user.id })
-  }
-
-  public addLiker(user: User): Print {
-    if (!this.userIsLiker(user)) {
-      this.likers.push(user)
-    }
-
-    return this
-  }
-
-  public removeLiker(user: User): Print {
-    remove(this.likers, matches({ id: user.id }))
-    return this
-  }
+  @Column({ default: 0 })
+  public likeCount!: number
 }

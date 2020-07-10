@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, Unique } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, Unique } from 'typeorm'
 import { Base } from './base.entity'
 import { Following } from './following.entity'
 import { Login } from './login.entity'
+import { PrintLiking } from './print-liking.entity'
 import { Print } from './print.entity'
 
 @Unique('user', ['username'])
@@ -29,11 +30,11 @@ export class User extends Base {
   )
   public prints!: Print[]
 
-  @ManyToMany(
-    () => Print,
-    print => print.likers
+  @OneToMany(
+    () => PrintLiking,
+    printLiking => printLiking.liker
   )
-  public liked!: Print[]
+  public printLikings!: PrintLiking[]
 
   @OneToMany(
     () => Following,

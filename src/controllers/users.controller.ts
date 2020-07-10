@@ -3,7 +3,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { User } from '../database/entities'
 import { CreateUser } from '../model/users'
 import { UsersService } from '../services/users.service'
-import { ApiController } from '../util/ApiController'
+import { ApiController } from '../util/api-controller'
 import { LocalAuthGuard } from '../util/auth'
 import { AuthUser, Public } from '../util/decorators'
 

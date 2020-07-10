@@ -10,7 +10,7 @@ import {
 import { Request, Response } from 'express'
 import { AuthService } from '../../services'
 import { InvalidSessionUser } from '../errors'
-import { ApiResponse } from '../interceptors'
+import { ApiResponse } from '../types/api-response'
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
