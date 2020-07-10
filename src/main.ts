@@ -30,7 +30,12 @@ async function bootstrap() {
       secret: config.get<string>('app.secret'),
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: 'auto', httpOnly: false, maxAge: 7 * 24 * 60 * 60 * 1000 },
+      cookie: {
+        secure: 'auto',
+        httpOnly: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: 'lax',
+      },
     })
   )
 
@@ -38,7 +43,7 @@ async function bootstrap() {
   app.use(passport.session())
   app.use(
     cors({
-      allowedHeaders: ['Content-Type'],
+      allowedHeaders: ['Content-Type', 'Accept'],
       methods: ['GET', 'POST', 'PATCH', 'DELETE'],
       origin: /./,
       credentials: true,
