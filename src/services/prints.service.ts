@@ -50,13 +50,24 @@ export class PrintsService extends ApiService<Print, CreatePrint> {
 
     const [prints, count] = await this.repository
       .createQueryBuilder('prints')
-      .leftJoinAndSelect('prints.creator', 'creator')
-      .leftJoinAndSelect(Following, 'followings', 'creator.id = followings.followingId')
+      .addSelect(
+        `
+          EXISTS (
+            select * from print_likings where
+            print_likings.printId = prints.id
+            AND print_likings.likerId = ${userId}
+          )
+      `,
+        'prints_userHasLiked'
+      )
+      .addSelect('prints.createdAt')
+      .innerJoinAndSelect('prints.creator', 'creator')
+      .leftJoin(Following, 'followings', 'creator.id = followings.followingId')
       .where('followings.followerId = :userId', { userId })
-      .cache(CACHE_EXPIRATION_TIME)
       .orWhere('creator.id = :userId', { userId })
-      .take(take)
       .skip(skip)
+      .take(take)
+      .cache(CACHE_EXPIRATION_TIME)
       .getManyAndCount()
 
     return paginate(prints, count, page)
@@ -97,7 +108,7 @@ export class PrintsService extends ApiService<Print, CreatePrint> {
       )
     })
 
-    return this.retrieve(printId)
+    return this.retrieve(printId, ['createdAt'])
   }
 
   public async unlike(printId: number, likerId: number) {
@@ -121,6 +132,6 @@ export class PrintsService extends ApiService<Print, CreatePrint> {
       )
     })
 
-    return this.retrieve(printId)
+    return this.retrieve(printId, ['createdAt'])
   }
 }

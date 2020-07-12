@@ -30,9 +30,15 @@ export class PrintsController extends ApiController<Print> {
     return this.service.getFeed(user.id, page)
   }
 
+  // @UseGuards(LocalAuthGuard)
+  // @Get('test')
+  // public test(@AuthUser() user: User) {
+  //   return this.service.test(user.id)
+  // }
+
   @Get(':id')
   public retrieve(@Param('id') id: number): Promise<Print> {
-    return this.service.retrieve(id, undefined, ['creator'])
+    return this.service.retrieve(id, undefined, ['creator', 'createdAt'])
   }
 
   @UseGuards(LocalAuthGuard)

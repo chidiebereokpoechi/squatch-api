@@ -11,6 +11,7 @@ import session from 'express-session'
 import passport from 'passport'
 import redis from 'redis'
 import { AppModule } from './app.module'
+import { RedisIoAdapter } from './util/adapters'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -32,7 +33,7 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         secure: 'auto',
-        httpOnly: false,
+        httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: 'lax',
       },
@@ -49,6 +50,8 @@ async function bootstrap() {
       credentials: true,
     })
   )
+
+  app.useWebSocketAdapter(new RedisIoAdapter(app))
 
   const options = new DocumentBuilder()
     .setTitle('Squatch')
