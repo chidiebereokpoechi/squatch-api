@@ -108,7 +108,7 @@ export class PrintsService extends ApiService<Print, CreatePrint> {
       )
     })
 
-    return this.retrieve(printId, ['createdAt'])
+    return this.retrieve(printId)
   }
 
   public async unlike(printId: number, likerId: number) {
@@ -132,6 +132,6 @@ export class PrintsService extends ApiService<Print, CreatePrint> {
       )
     })
 
-    return this.retrieve(printId, ['createdAt'])
+    return this.retrieve(printId)
   }
 }

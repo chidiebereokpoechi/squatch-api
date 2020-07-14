@@ -13,7 +13,7 @@ database:
   synchronize: true
   cache: true
   supportsJson: true
-  # dropSchema: true
+  dropSchema: false
 
 redis:
   host: localhost

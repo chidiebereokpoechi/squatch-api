@@ -1,6 +1,7 @@
 app:
   port: APP_PORT
   secret: APP_SECRET
+  secure: APP_SECURE
 
 database:
   host: DATABASE_HOST
@@ -9,6 +10,7 @@ database:
   database: DATABASE_NAME
   username: DATABASE_USERNAME
   password: DATABASE_PASSWORD
+  dropSchema: DATABASE_DROP_SCHEMA
 
 redis:
   host: REDIS_HOST

@@ -32,10 +32,10 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: 'auto',
-        httpOnly: true,
+        secure: Boolean((process.env.COOKIE_SECURE as any) ?? false),
+        httpOnly: Boolean((process.env.COOKIE_HTTP_ONLY as any) ?? false),
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'lax',
+        sameSite: (process.env.COOKIE_SAME_SITE as any) ?? undefined,
       },
     })
   )
@@ -46,7 +46,7 @@ async function bootstrap() {
     cors({
       allowedHeaders: ['Content-Type', 'Accept'],
       methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-      origin: /./,
+      origin: process.env.APP_FRONTEND_ORIGIN,
       credentials: true,
     })
   )
