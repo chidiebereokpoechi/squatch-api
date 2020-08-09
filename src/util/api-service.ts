@@ -26,13 +26,14 @@ export class ApiService<
     return this.repository.retrieveBy(subset, select, relations)
   }
 
-  public create(model: CreateModel, ...args: any[]): Promise<T> {
+  public create(model: CreateModel, ...args: unknown[]): Promise<T> {
     return this.repository.save(model)
   }
 
   public async checkBy(path: string, value: string): Promise<boolean> {
-    const [relation] = path.split(':') as [string | undefined, string]
-    const response = await this.repository.checkBy(path.replace(':', '.'), value, relation)
+    const [relation, property] = path.split(':') as [string, string]
+    const accessor = relation.length ? `${relation}.${property}` : property
+    const response = await this.repository.checkBy(accessor, value, relation)
     return !!response
   }
 }
